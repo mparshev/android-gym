@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Gym</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="empty_list">Давай уже! Начинай!</string>
+    <string name="action_new">Создать</string>
+    <string-array name="exercise_group">
+        <item >Бицепсы</item>
+        <item >Трицепсы</item>
+        <item >Грудь</item>
+        <item >Спина</item>
+        <item >Пресс</item>
+        <item >Ноги</item>
+        <item >Кардио</item>
+    </string-array>
+    <string name="exit_message">Закончить тренировку?</string>
+    <string-array name="weight_units">
+        <item >кг</item>
+        <item >lbs</item>
+        <item >lvl</item>
+        <item >нет</item>
+    </string-array>
+    <string-array name="reps_units">
+        <item >раз</item>
+        <item >мин</item>
+        <item >сек</item>
+    </string-array>
+        <string name="label_group">Группа</string>
+        <string name="label_exercise">Упражнение</string>
+        <string name="label_weight_unit">Ед.нагр.</string>
+        <string name="label_reps_unit">Ед.повт.</string>
+        <string name="action_accept">Сохранить</string>
+        <string name="label_weight">Вес</string>
+        <string name="label_reps">Повт</string>
+        <string name="action_discard">Удалить</string>
+        <string name="action_edit">Редактировать</string>
+        <string name="action_history">Архив</string>
+        <string name="button_start">Начать тренировку</string>
+        <string name="total_training">Всего тренировок</string>
+    
+</resources>
