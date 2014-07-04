@@ -56,14 +56,8 @@ public class TrainingFragment extends ListFragment implements
 				.replace(R.id.content_frame, fragment)
 				.addToBackStack(null)
 				.commit();
-			return true; 
-		case R.id.action_history:
-			fragment = new HistoryFragment();
-			getActivity().getFragmentManager().beginTransaction()
-			.replace(R.id.content_frame, fragment)
-			.addToBackStack(null)
-			.commit();
 			return true;
+			
 		}
 		return super.onOptionsItemSelected(item);
 	}

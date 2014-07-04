@@ -13,16 +13,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class HistoryFragment extends ListFragment  implements LoaderCallbacks<Cursor> {
+public class ExerciseHistoryFragment extends ListFragment  implements LoaderCallbacks<Cursor> {
 
 	static final int LOADER_ID = 1;
 
-	HistoryAdapter mAdapter;
+	ExerciseHistoryAdapter mAdapter;
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -31,22 +30,11 @@ public class HistoryFragment extends ListFragment  implements LoaderCallbacks<Cu
 		
 		setEmptyText(getResources().getString(R.string.empty_list));
 		
-		mAdapter = new HistoryAdapter(getActivity(), null, getArguments());
+		mAdapter = new ExerciseHistoryAdapter(getActivity(), null, getArguments());
 		
 		setListAdapter(mAdapter);
 
 		getLoaderManager().initLoader(LOADER_ID, getArguments(), this);
-		
-		getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				((MainActivity)getActivity()).showTraining(id);
-				return true;
-			}
-		
-		});
 
 		super.onActivityCreated(savedInstanceState);
 	}
@@ -72,12 +60,12 @@ public class HistoryFragment extends ListFragment  implements LoaderCallbacks<Cu
 		mAdapter.swapCursor(null);
 	}
 
-	public class HistoryAdapter extends CursorAdapter {
+	public class ExerciseHistoryAdapter extends CursorAdapter {
 		
 		String mSelection = GymDb.TRAINING.TRAINING_ID + "=" + "?";
 		String[] mSelectionArgs = new String[] { "" };
 
-		public HistoryAdapter(Context context, Cursor c, Bundle args) {
+		public ExerciseHistoryAdapter(Context context, Cursor c, Bundle args) {
 			super(context, c, true);
 			if(args != null && args.containsKey(GymDb.ARGS.EXERCISE_ID)) {
 				mSelection += " and " + GymDb.TRAINING.EXERCISE_ID + "=" + "?";
@@ -87,7 +75,7 @@ public class HistoryFragment extends ListFragment  implements LoaderCallbacks<Cu
 
 		@Override
 		public View newView(Context context, Cursor cursor, ViewGroup parent) {
-			return LayoutInflater.from(context).inflate(R.layout.history_item, parent, false);
+			return LayoutInflater.from(context).inflate(R.layout.exercise_history_item, parent, false);
 		}
 
 		@Override
@@ -95,9 +83,6 @@ public class HistoryFragment extends ListFragment  implements LoaderCallbacks<Cu
 			((TextView)view.findViewById(R.id.textDate)).setText(
 					DateFormat.getDateFormat(context).format(
 							GymDb.getLong(cursor, GymDb.TRAINING.TRAINING_ID)));
-			((TextView)view.findViewById(R.id.textTotals)).setText(
-					" " + GymDb.getInt(cursor, GymDb.TRAINING_TOTALS.SET_COUNT) +		
-					"/" + GymDb.getInt(cursor, GymDb.TRAINING_TOTALS.REP_COUNT)	);
 			mSelectionArgs[0] = "" + GymDb.getLong(cursor, GymDb.TRAINING.TRAINING_ID);
 			populateListSets(context,
 					(LinearLayout)view.findViewById(R.id.listSets),

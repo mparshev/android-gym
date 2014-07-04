@@ -71,9 +71,11 @@ public class GymDb extends ContentProvider {
 
 	}
 	
-	public static final class TRAINING_IDS {
+	public static final class TRAINING_TOTALS {
 		public static final String _TABLE = "training_ids";
 		public static final Uri _URI = Uri.withAppendedPath(CONTENT_URI, _TABLE);
+		public static final String SET_COUNT = "set_count"; 
+		public static final String REP_COUNT = "rep_count"; 
 	}
 
 	public static final class TRAINING_SETS {
@@ -97,7 +99,7 @@ public class GymDb extends ContentProvider {
 	public static final int EXERCISE_QUERY = 3;
 	public static final int EXERCISE_ROW_QUERY = 4;
 	
-	public static final int TRAINING_IDS_QUERY = 5;
+	public static final int TRAINING_TOTALS_QUERY = 5;
 	public static final int TRAINING_REPS_QUERY = 6;
 	public static final int TRAINING_SETS_QUERY = 7;
 	public static final int TRAINING_SETS_ROW_QUERY = 8;
@@ -108,7 +110,7 @@ public class GymDb extends ContentProvider {
 		sUriMatcher.addURI(AUTHORITY, TRAINING._TABLE + "/#", TRAINING_ROW_QUERY);
 		sUriMatcher.addURI(AUTHORITY, EXERCISE._TABLE, EXERCISE_QUERY);
 		sUriMatcher.addURI(AUTHORITY, EXERCISE._TABLE + "/#", EXERCISE_ROW_QUERY);
-		sUriMatcher.addURI(AUTHORITY, TRAINING_IDS._TABLE, TRAINING_IDS_QUERY);
+		sUriMatcher.addURI(AUTHORITY, TRAINING_TOTALS._TABLE, TRAINING_TOTALS_QUERY);
 		sUriMatcher.addURI(AUTHORITY, TRAINING_SETS._TABLE, TRAINING_SETS_QUERY);
 		sUriMatcher.addURI(AUTHORITY, TRAINING_SETS._TABLE + "/#", TRAINING_SETS_ROW_QUERY);
 		sUriMatcher.addURI(AUTHORITY, TRAINING_REPS._TABLE + "/#", TRAINING_REPS_QUERY);
@@ -173,13 +175,24 @@ public class GymDb extends ContentProvider {
 					BaseColumns._ID + " = " + "?", 
 					new String[] { uri.getLastPathSegment() }, 
 					null, null, null);
-		case TRAINING_IDS_QUERY:
-			cursor = mDataHelper.getReadableDatabase().query(true, 
-					TRAINING._TABLE, 
+		case TRAINING_TOTALS_QUERY:
+//			cursor = mDataHelper.getReadableDatabase().query(true, 
+//					TRAINING._TABLE, 
+//					new String[] { 
+//						TRAINING.TRAINING_ID + " as " + BaseColumns._ID,
+//						TRAINING.TRAINING_ID }, 
+//					null, null, null, null, TRAINING.TRAINING_ID + " DESC", null);
+			cursor = mDataHelper.getReadableDatabase().query(TRAINING._TABLE, 
 					new String[] { 
 						TRAINING.TRAINING_ID + " as " + BaseColumns._ID,
-						TRAINING.TRAINING_ID }, 
-					null, null, null, null, TRAINING.TRAINING_ID + " DESC", null);
+						TRAINING.TRAINING_ID, 
+						"count(distinct " + TRAINING.SET_ID + ") as " + TRAINING_TOTALS.SET_COUNT,
+						"count(*) as " + TRAINING_TOTALS.REP_COUNT
+						}, 
+					null, 
+					null, 
+					TRAINING.TRAINING_ID, 
+					null, TRAINING.TRAINING_ID + " DESC", null);
 			cursor.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
 			return cursor;
 		case TRAINING_SETS_QUERY:	// For history

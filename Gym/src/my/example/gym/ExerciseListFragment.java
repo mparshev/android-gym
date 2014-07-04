@@ -29,7 +29,7 @@ public class ExerciseListFragment extends Fragment {
 		
 		setHasOptionsMenu(true);
 		
-		mExerciseList = (ExpandableListView)view;
+		mExerciseList = (ExpandableListView)view.findViewById(R.id.exerciseList);
 		mExerciseListAdapter = new ExerciseListAdapter(getActivity());
 		
 		mExerciseList.setAdapter(mExerciseListAdapter);

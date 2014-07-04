@@ -127,26 +127,23 @@ public class TrainingFormFragment extends Fragment {
 				.commit();
 			return true;
 		case R.id.action_accept:
+
 			FragmentManager fm = getActivity().getFragmentManager();
+			int id = fm.getBackStackEntryAt(0).getId();
+			fm.popBackStackImmediate(id, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			
-			//int id = fm.getBackStackEntryAt(0).getId();
-			//fm.popBackStack(id, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-			
-			if(!fm.popBackStackImmediate("training", 0)) {
-				int id = fm.getBackStackEntryAt(0).getId();
-				fm.popBackStack(id, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-			};
+			// configChanges in AndroidManifest solves the problem of overlapping fragments
 
 			return true;
-		case R.id.action_history:
-			fragment = new HistoryFragment();
+		case R.id.action_excs_history:
+			fragment = new ExerciseHistoryFragment();
 			Bundle args = new Bundle();
 			args.putLong(GymDb.ARGS.EXERCISE_ID, mExerciseId);
 			fragment.setArguments(args);
 			getActivity().getFragmentManager().beginTransaction()
-			.replace(R.id.content_frame, fragment)
-			.addToBackStack(null)
-			.commit();
+				.replace(R.id.content_frame, fragment)
+				.addToBackStack(null)
+				.commit();
 			return true;
 			
 		}
