@@ -37,6 +37,7 @@ public class GymDb extends ContentProvider {
 		public static final String EXERCISE_ID = "exercise_id";
 		public static final String WEIGHT = "weight";
 		public static final String REPS = "reps";
+		public static final String REPS_TIME = "reps_time";
 		
 		public static final String _CREATE_SQL = "create table " + _TABLE + "(" 
 				+ _ID 			+ " integer primary key autoincrement, "
@@ -44,7 +45,8 @@ public class GymDb extends ContentProvider {
 				+ SET_ID		+ " integer, "
 				+ EXERCISE_ID	+ " integer, "
 				+ WEIGHT 		+ " integer, "
-				+ REPS 			+ " integer )";
+				+ REPS 			+ " integer, "
+				+ REPS_TIME		+ " integer )";
 	}
 	
 	public static final class EXERCISE {
@@ -76,6 +78,8 @@ public class GymDb extends ContentProvider {
 		public static final Uri _URI = Uri.withAppendedPath(CONTENT_URI, _TABLE);
 		public static final String SET_COUNT = "set_count"; 
 		public static final String REP_COUNT = "rep_count"; 
+		public static final String TOTAL_REPS = "total_reps";	// общее число повторов
+		public static final String TOTAL_TIME = "total_time";
 	}
 
 	public static final class TRAINING_SETS {
@@ -119,7 +123,7 @@ public class GymDb extends ContentProvider {
 	private static class DataHelper extends SQLiteOpenHelper {
 
 		private static final String DATABASE_NAME = "gym";
-		private static final int DATABASE_VERSION = 1;
+		private static final int DATABASE_VERSION = 2;
 		
 		public DataHelper(Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -133,9 +137,12 @@ public class GymDb extends ContentProvider {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			db.execSQL("drop table if exists " + TRAINING._TABLE);
-			db.execSQL("drop table if exists " + EXERCISE._TABLE);
-			onCreate(db);
+			if(oldVersion==1 && newVersion==2) {
+				db.execSQL("alter table " + TRAINING._TABLE + " add column "+ TRAINING.REPS_TIME + " integer");
+			}
+			//db.execSQL("drop table if exists " + TRAINING._TABLE);
+			//db.execSQL("drop table if exists " + EXERCISE._TABLE);
+			//onCreate(db);
 		}
 		
 	}
@@ -187,7 +194,9 @@ public class GymDb extends ContentProvider {
 						TRAINING.TRAINING_ID + " as " + BaseColumns._ID,
 						TRAINING.TRAINING_ID, 
 						"count(distinct " + TRAINING.SET_ID + ") as " + TRAINING_TOTALS.SET_COUNT,
-						"count(*) as " + TRAINING_TOTALS.REP_COUNT
+						"count(*) as " + TRAINING_TOTALS.REP_COUNT,
+						"max(" + TRAINING.REPS_TIME + ")-" + TRAINING.TRAINING_ID + " as " + TRAINING_TOTALS.TOTAL_TIME,
+						"sum(" + TRAINING.REPS + ") as " + TRAINING_TOTALS.TOTAL_REPS
 						}, 
 					null, 
 					null, 

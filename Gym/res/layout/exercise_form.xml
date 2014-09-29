@@ -27,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="@string/editExHint"
         android:inputType="textCapSentences"
         android:textAppearance="?android:attr/textAppearanceLargeInverse" >
 

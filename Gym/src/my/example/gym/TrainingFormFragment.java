@@ -92,6 +92,7 @@ public class TrainingFormFragment extends Fragment {
 				values.put(GymDb.TRAINING.EXERCISE_ID, mExerciseId);
 				values.put(GymDb.TRAINING.WEIGHT, mNumberPickerWeight.getValue());
 				values.put(GymDb.TRAINING.REPS, mNumberPickerReps.getValue());
+				values.put(GymDb.TRAINING.REPS_TIME, System.currentTimeMillis());
 				getActivity().getContentResolver().insert(GymDb.TRAINING._URI, values);
 				values.clear();
 				values.put(GymDb.EXERCISE.WORK_WEIGHT, mNumberPickerWeight.getValue());

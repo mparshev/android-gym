@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class HistoryFragment extends ListFragment  implements LoaderCallbacks<Cursor> {
@@ -96,29 +95,22 @@ public class HistoryFragment extends ListFragment  implements LoaderCallbacks<Cu
 					DateFormat.getDateFormat(context).format(
 							GymDb.getLong(cursor, GymDb.TRAINING.TRAINING_ID)));
 			((TextView)view.findViewById(R.id.textTotals)).setText(
-					" " + GymDb.getInt(cursor, GymDb.TRAINING_TOTALS.SET_COUNT) +		
-					"/" + GymDb.getInt(cursor, GymDb.TRAINING_TOTALS.REP_COUNT)	);
+					GymDb.getInt(cursor, GymDb.TRAINING_TOTALS.SET_COUNT)		
+					+ "/" + GymDb.getInt(cursor, GymDb.TRAINING_TOTALS.REP_COUNT)	
+					+ "/" + GymDb.getInt(cursor, GymDb.TRAINING_TOTALS.TOTAL_REPS));
+			((TextView)view.findViewById(R.id.textTotalTime)).setText(
+					" " + formatAsTime(GymDb.getLong(cursor, GymDb.TRAINING_TOTALS.TOTAL_TIME)));
 			mSelectionArgs[0] = "" + GymDb.getLong(cursor, GymDb.TRAINING.TRAINING_ID);
-			populateListSets(context,
-					(LinearLayout)view.findViewById(R.id.listSets),
-					context.getContentResolver().query(GymDb.TRAINING_SETS._URI, 
-							null, mSelection, mSelectionArgs, null));
 			
 		}
 		
-		private void populateListSets(Context context, LinearLayout list, Cursor cursor) {
-			list.removeAllViews();
-			if(cursor == null) return;
-			while(cursor.moveToNext()) {
-				View view = LayoutInflater.from(context)
-						.inflate(R.layout.training_set_item, list, false);
-				((TextView)view.findViewById(R.id.textExercise)).setText(
-						GymDb.getString(cursor, GymDb.EXERCISE.EXERCISE));
-				((TextView)view.findViewById(R.id.textSet)).setText(
-						GymDb.getReps(context, GymDb.getLong(cursor, GymDb.TRAINING.SET_ID)));
-				list.addView(view);
-			}
-			cursor.close();
+		private String formatAsTime(long time) {
+			long ss = time / 1000;
+			long mm = ss / 60; ss = ss - mm * 60;
+			long hh = mm / 60; mm = mm - hh * 60;
+			return "" + hh + ":" + mm + ":" + ss;
+			
 		}
+		
 	}
 }

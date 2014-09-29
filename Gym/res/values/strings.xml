@@ -39,5 +39,6 @@
         <string name="action_history">Архив</string>
         <string name="button_start">Начать тренировку</string>
         <string name="total_training">Всего тренировок</string>
+        <string name="editExHint">Упражнение</string>
     
 </resources>
